@@ -1,0 +1,11 @@
+{
+  "name": "senatile",
+  "version": "0.1.0",
+  "authors": [
+    "oyyd <oyydoibh@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "angular-material": "~0.8.3"
+  }
+}
