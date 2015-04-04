@@ -26,10 +26,11 @@ task.Task = function(name, command) {
   };
 };
 
-task.transform = function(commands) {
-  var tasks = [];
-  for (var command in commands) {
-
+//return an array of executable tasks.
+task.transform = function(tasks) {
+  var compiledTasks = [];
+  for (var taskName in tasks) {
+    compiledTasks.push(new task.Task(taskName, tasks[taskName].command));
   }
-  return tasks;
+  return compiledTasks;
 };
