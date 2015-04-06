@@ -39,21 +39,20 @@ data._getFile = function(path, callback) {
   });
 };
 
-data.setProject = function(projectName, tasksResult, callback) {
+data.setProject = function(projectName, head, tasksResult, callback) {
   async.waterfall([function(callback) {
     // get project info
     data.getProject(projectName, function(err, projectObj) {
       callback(err, projectObj);
     });
   }, function(projectObj, callback) {
-    // TODO: how to define version?
-    var version = new Date();
-
-    var result = projectObj[version.toString()] = {};
+    var result = projectObj[head] = {};
+    result.timestamp = Date.now();
+    result.tasksResult = {};
 
     // compose new object 
     for (var taskName in tasksResult) {
-      result[taskName] = tasksResult[taskName];
+      result.tasksResult[taskName] = tasksResult[taskName];
     }
 
     var resultStr = JSON.stringify(projectObj);
@@ -64,6 +63,21 @@ data.setProject = function(projectName, tasksResult, callback) {
     });
   }], function(err) {
     callback(err);
+  });
+};
+
+data.getProjectHeads = function(projectName, callback) {
+  data.getProject(projectName, function(err, projectObj) {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    var heads = [];
+    for (var head in projectObj) {
+      heads.push(head);
+    }
+    callback(null, heads);
   });
 };
 
