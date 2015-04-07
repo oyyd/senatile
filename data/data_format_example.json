@@ -1,0 +1,18 @@
+{
+  "948f77e3e931c4360ec556ec64e25bdf66bf207b": {
+    "timestamp": 1428332091242,
+    "tasksResult": {
+      "time": "data-time",
+      "karma": "result string",
+      "jshint": "result string"
+    }
+  },
+  "948f77e3e931c4360ec556ec64e25bdf66bf207c": {
+    "timestamp": 1428332091242,
+    "tasksResult": {
+      "time": "data-time",
+      "karma": "result string",
+      "jshint": "result string"
+    }
+  }
+}

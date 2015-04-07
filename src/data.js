@@ -82,7 +82,7 @@ data.getProjectHeads = function(projectName, callback) {
 };
 
 function filePath(projectName) {
-  return '../data/' + projectName + '.json';
+  return __dirname + '/../data/' + projectName + '.json';
 }
 
 function isExist(path, callback) {

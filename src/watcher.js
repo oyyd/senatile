@@ -26,14 +26,14 @@ var Watcher = module.exports = exports = function(projectName, projectPath, trig
       });
     };
 
-    Watcher.prototype.willTriggerHead = function(head, callback) {
+    Watcher.prototype.shouldTrigger = function(head, callback) {
       data.getProjectHeads(projectName, function(err, heads) {
         if (err) {
           //TODO: better err handling
           throw err;
         }
 
-        if (head in heads) {
+        if (~heads.indexOf(head)) {
           callback(false);
           return;
         }
@@ -52,6 +52,7 @@ var Watcher = module.exports = exports = function(projectName, projectPath, trig
   });
 };
 
+//TODO: move isGitExists to another file.
 function isGitExists(callback) {
   var runGitVersion = childProcess.spawn('git', ['version']);
 
