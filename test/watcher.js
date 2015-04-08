@@ -15,8 +15,7 @@ describe('Watcher', function() {
         }
       };
 
-      var project = new Project(projectOption);
-      var watcher = new Watcher(project);
+      var watcher = new Watcher(projectOption);
 
       watcher.isPathExists(function(exists) {
         exists.should.be.true;
@@ -25,13 +24,11 @@ describe('Watcher', function() {
     });
 
     it('should return false when path doesn\'t exists', function() {
-      var project = new Project({
+      var watcher = new Watcher({
         "name": 'a_project_path_doesn\'t_exists',
         "path": './a_project_path_doesn\'t_exists',
         "tasks": []
       });
-
-      var watcher = new Watcher(project);
 
       watcher.isPathExists(function(exists) {
         exists.should.be.false;
@@ -42,12 +39,11 @@ describe('Watcher', function() {
 
   describe('getHead', function() {
     it('should get the head of the testing project', function(done) {
-      var project = new Project({
+      var watcher = new Watcher({
         "name": 'test',
         "path": __dirname + '/test_folder',
         "tasks": []
       });
-      var watcher = new Watcher(project);
 
       watcher.getHead(function(head) {
         head.should.not.be.empty;
@@ -59,12 +55,11 @@ describe('Watcher', function() {
   describe('shouldTrigger', function() {
     it('should trigger when head is different', function(done) {
       var head = 'a_head_that_not_same';
-      var project = new Project({
+      var watcher = new Watcher({
         "name": 'test',
         "path": __dirname + '/test_folder',
         "tasks": []
       });
-      var watcher = new Watcher(project);
 
       watcher.shouldTrigger(head, function(trigger) {
         trigger.should.be.true;
@@ -74,13 +69,11 @@ describe('Watcher', function() {
 
     it('should not trigger when head is same', function(done) {
       var head = 'e9c920cd2bab859c72944ba9869948d1d74a2f74';
-
-      var project = new Project({
+      var watcher = new Watcher({
         "name": 'test',
         "path": __dirname + '/test_folder',
         "tasks": []
       });
-      var watcher = new Watcher(project);
 
       watcher.shouldTrigger(head, function(trigger) {
         trigger.should.be.false;

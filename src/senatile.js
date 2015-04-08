@@ -1,8 +1,22 @@
 //main
-
 //dependencies
 var fs = require('fs'),
-  Watcher = require('./watcher');
+  Watcher = require('./watcher'),
+  utils = require('./utils');
+
+//check external dependencies
+//Check the existing of git when initialized.
+isGitExists(function(err, exist) {
+  if (err) {
+    //TODO: better err handling
+    throw err;
+  };
+
+  if (!exist) {
+    //TODO: better warning
+    throw new Error('git not found');
+  }
+});
 
 //load config
 //TODO: handle invalid config file

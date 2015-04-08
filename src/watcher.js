@@ -2,10 +2,11 @@
 //dependencies
 var childProcess = require('child_process'),
   fs = require('fs'),
-  data = require('./data');
+  data = require('./data'),
+  Project = require('./project');
 
-var Watcher = module.exports = exports = function(project) {
-  this.project = project;
+var Watcher = module.exports = exports = function(projectOptions) {
+  this.project = new Project(projectOptions);
 
   if (!!!this.isPathExists) {
     Watcher.prototype.isPathExists = function(callback) {
@@ -49,36 +50,3 @@ var Watcher = module.exports = exports = function(project) {
     }
   });
 };
-
-//TODO: move isGitExists to another file.
-function isGitExists(callback) {
-  var runGitVersion = childProcess.spawn('git', ['version']);
-
-  var result = '';
-  runGitVersion.stdout.on('data', function(data) {
-    result += data;
-  });
-
-  //TODO: add err handling
-  runGitVersion.on('close', function(code, signal) {
-    var exist = false;
-    //TODO: is this right?
-    if (~result.indexOf('git version')) {
-      exist = true;
-    }
-    callback(null, exist);
-  });
-};
-
-//Check the existing of git when initialized.
-isGitExists(function(err, exist) {
-  if (err) {
-    //TODO: better err handling
-    throw err;
-  };
-
-  if (!exist) {
-    //TODO: better warning
-    throw new Error('git not found');
-  }
-});
