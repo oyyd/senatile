@@ -1,11 +1,17 @@
 //main
 
 //dependencies
-var fs = require('fs');
+var fs = require('fs'),
+  Watcher = require('./watcher');
 
 //load config
 //TODO: handle invalid config file
-var config = JSON.parse(fs.readFileSync('../senatile_config.json'));
+try {
+  var config = JSON.parse(fs.readFileSync('../senatile_config.json'));
+} catch (err) {
+  console.log(err);
+  return;
+}
 
 console.log(config);
 

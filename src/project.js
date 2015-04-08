@@ -4,6 +4,7 @@ var async = require('async'),
   task = require('./task');
 
 var Project = module.exports = exports = function(options) {
+  this.name = options.name;
   this.path = options.path;
   this.tasks = task.transform(options.tasks);
 

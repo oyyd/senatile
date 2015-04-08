@@ -5,6 +5,7 @@ describe('Project', function() {
   describe('runTasks', function() {
     it('command ls should get result', function(done) {
       var options = {
+        'name': 'test',
         "path": '/home/oyyd/code/github/senatile/test/',
         "tasks": {
           "ls": {

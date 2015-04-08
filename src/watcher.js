@@ -4,14 +4,12 @@ var childProcess = require('child_process'),
   fs = require('fs'),
   data = require('./data');
 
-var Watcher = module.exports = exports = function(projectName, projectPath, triggerFuncs) {
-  this.projectName = projectName;
-  this.projectPath = projectPath;
-  this.triggerFuncs = triggerFuncs;
+var Watcher = module.exports = exports = function(project) {
+  this.project = project;
 
   if (!!!this.isPathExists) {
     Watcher.prototype.isPathExists = function(callback) {
-      fs.exists(this.projectPath, function(exist) {
+      fs.exists(this.project.path, function(exist) {
         callback(exist);
       });
     };
@@ -19,7 +17,7 @@ var Watcher = module.exports = exports = function(projectName, projectPath, trig
     Watcher.prototype.getHead = function(callback) {
       var getHeadProc = childProcess.exec('git rev-parse HEAD', {
         //TODO: better options
-        'cwd': this.projectPath
+        'cwd': this.project.path
       }, function(err, stdout, stderr) {
         //TODO: better error handling
         callback(stdout);
@@ -27,7 +25,7 @@ var Watcher = module.exports = exports = function(projectName, projectPath, trig
     };
 
     Watcher.prototype.shouldTrigger = function(head, callback) {
-      data.getProjectHeads(projectName, function(err, heads) {
+      data.getProjectHeads(this.project.name, function(err, heads) {
         if (err) {
           //TODO: better err handling
           throw err;
@@ -47,7 +45,7 @@ var Watcher = module.exports = exports = function(projectName, projectPath, trig
   this.isPathExists(function(exist) {
     //TODO: better err handling
     if (!exist) {
-      throw new Error('project path: ' + that.projectPath + 'does not exist.');
+      throw new Error('project path: ' + that.project.path + 'does not exist.');
     }
   });
 };
