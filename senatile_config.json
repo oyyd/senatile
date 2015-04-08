@@ -1,21 +1,21 @@
 {
-  "projects":{
-    "project1":{
-      "path":"",
-      "tasks":{
-        "karma":{
-          "command":"karma start"
+  "projects": {
+    "project1": {
+      "path": "",
+      "tasks": {
+        "karma": {
+          "command": "karma start"
         },
-        "jshint":{
-          "command":"jshint ."
+        "jshint": {
+          "command": "jshint ."
         }
       }
     },
-    "project1":{
-      "path":"",
-      "tasks":{
-        "jshint":{
-          "command":"jshint ."
+    "project1": {
+      "path": "",
+      "tasks": {
+        "jshint": {
+          "command": "jshint ."
         }
       }
     }

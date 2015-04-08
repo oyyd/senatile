@@ -4,33 +4,44 @@ var fs = require('fs'),
   Watcher = require('./watcher'),
   utils = require('./utils');
 
-//check external dependencies
-//Check the existing of git when initialized.
-isGitExists(function(err, exist) {
-  if (err) {
-    //TODO: better err handling
-    throw err;
+var senatile = module.exports = exports = {};
+
+senatile.init = function(config) {
+  senatile.checkEnv();
+
+  if (!(config instanceof Object)) {
+    //load config
+    //TODO: handle invalid config file
+    try {
+      var config = JSON.parse(fs.readFileSync('../senatile_config.json'));
+    } catch (err) {
+      throw err;
+      return;
+    }
+  }
+  //start watching
+  var watchers = [];
+  for (var name in config.projects) {
+    var projectOption = Object.create(config.projects[name]);
+    projectOption.name = name;
+    watchers.push(new Watcher(projectOption));
   };
 
-  if (!exist) {
-    //TODO: better warning
-    throw new Error('git not found');
-  }
-});
+  return watchers;
+};
 
-//load config
-//TODO: handle invalid config file
-try {
-  var config = JSON.parse(fs.readFileSync('../senatile_config.json'));
-} catch (err) {
-  console.log(err);
-  return;
-}
+senatile.checkEnv = function() {
+  //check external dependencies
+  //Check the existing of git when initialized.
+  utils.isGitExists(function(err, exist) {
+    if (err) {
+      //TODO: better err handling
+      throw err;
+    };
 
-console.log(config);
-
-//start watching
-var watchProjects = {};
-for (var name in config.projects) {
-  watchProjects[name] = config.projects[name];
+    if (!exist) {
+      //TODO: better warning
+      throw new Error('git not found');
+    }
+  });
 };
