@@ -7,7 +7,7 @@ describe('Watcher', function() {
     it('should return true when path exists', function(done) {
       var projectOption = {
         "name": "test",
-        "path": '/home/oyyd/code/github/senatile/test/',
+        "path": __dirname,
         "tasks": {
           "ls": {
             "command": "ls"
