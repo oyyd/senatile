@@ -24,7 +24,10 @@ senatile.init = function(config) {
   for (var name in config.projects) {
     var projectOption = Object.create(config.projects[name]);
     projectOption.name = name;
-    watchers.push(new Watcher(projectOption));
+
+    var watcher = new Watcher(projectOption);
+    watcher.startWatch();
+    watchers.push(watchers);
   };
 
   return watchers;

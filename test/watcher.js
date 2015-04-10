@@ -54,28 +54,28 @@ describe('Watcher', function() {
 
   describe('shouldTrigger', function() {
     it('should trigger when head is different', function(done) {
-      var head = 'a_head_that_not_same';
       var watcher = new Watcher({
         "name": 'test',
         "path": __dirname + '/test_folder',
         "tasks": []
       });
 
-      watcher.shouldTrigger(head, function(trigger) {
+      watcher.shouldTrigger(function(trigger) {
         trigger.should.be.true;
         done();
       });
     });
 
     it('should not trigger when head is same', function(done) {
-      var head = 'e9c920cd2bab859c72944ba9869948d1d74a2f74';
       var watcher = new Watcher({
         "name": 'test',
         "path": __dirname + '/test_folder',
         "tasks": []
       });
 
-      watcher.shouldTrigger(head, function(trigger) {
+      watcher.setHead('e9c920cd2bab859c72944ba9869948d1d74a2f74');
+
+      watcher.shouldTrigger(function(trigger) {
         trigger.should.be.false;
         done();
       });
