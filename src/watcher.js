@@ -2,6 +2,7 @@
 //dependencies
 var childProcess = require('child_process'),
   fs = require('fs'),
+  async = require('async'),
   data = require('./data'),
   Project = require('./project');
 
@@ -102,20 +103,19 @@ var Watcher = module.exports = exports = function(projectOptions) {
   }
 
   //check if project path exists.
-  var checkPath = new Promise(function(resolve, reject) {
+  async.waterfall([function(cb) {
     that.isPathExists(function(exist) {
       if (!exist) {
-        reject(new Error('project path: ' + that.project.path + 'does not exist.'));
+        cb(new Error('project path: ' + that.project.path + 'does not exist.'));
       } else {
-        resolve();
+        cb(null);
       }
     });
-  }).then(function() {
-    //init head
+  }, function() {
     that.initHead(function() {
       that.initialized = true;
     });
-  }, function(err) {
+  }], function(err) {
     //TODO: better err handling
     throw err;
   });
