@@ -8,7 +8,10 @@ var childProcess = require('child_process'),
 var Watcher = module.exports = exports = function(projectOptions) {
   this.project = new Project(projectOptions);
   this.latestHead = null;
+  this.initialized = false;
   this._checkInterval = 10000;
+
+  var that = this;
 
   if (!!!this.isPathExists) {
     Watcher.prototype.isPathExists = function(callback) {
@@ -29,18 +32,31 @@ var Watcher = module.exports = exports = function(projectOptions) {
         'cwd': this.project.path
       }, function(err, stdout, stderr) {
         //TODO: better error handling
-        callback(stdout);
+        callback(stdout.trim());
       });
     };
 
+    Watcher.prototype.initHead = function(callback) {
+      var that = this;
+      if (!!!this.latestHead) {
+        this.getHead(function(head) {
+          that.setHead(head);
+          callback();
+        });
+      } else {
+        callback();
+      }
+    };
+
     Watcher.prototype.shouldTrigger = function(callback) {
+      var that = this;
       data.getProjectHeads(this.project.name, function(err, heads) {
         if (err) {
           //TODO: better err handling
           throw err;
         }
 
-        if (~heads.indexOf(this.head)) {
+        if (~heads.indexOf(that.latestHead)) {
           callback(false);
           return;
         }
@@ -85,18 +101,22 @@ var Watcher = module.exports = exports = function(projectOptions) {
     };
   }
 
-  var that = this;
   //check if project path exists.
-  this.isPathExists(function(exist) {
+  var checkPath = new Promise(function(resolve, reject) {
+    that.isPathExists(function(exist) {
+      if (!exist) {
+        reject(new Error('project path: ' + that.project.path + 'does not exist.'));
+      } else {
+        resolve();
+      }
+    });
+  }).then(function() {
+    //init head
+    that.initHead(function() {
+      that.initialized = true;
+    });
+  }, function(err) {
     //TODO: better err handling
-    if (!exist) {
-      throw new Error('project path: ' + that.project.path + 'does not exist.');
-    }
-  });
-
-  //get latest head
-  this.getHead(function(head) {
-    //TODO: What should be done when then head is not fetched ?
-    that.setHead(head);
+    throw err;
   });
 };

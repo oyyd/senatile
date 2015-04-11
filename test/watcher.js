@@ -60,6 +60,8 @@ describe('Watcher', function() {
         "tasks": []
       });
 
+      watcher.setHead('a_head_that_doesn\'t exist');
+
       watcher.shouldTrigger(function(trigger) {
         trigger.should.be.true;
         done();
