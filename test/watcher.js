@@ -62,7 +62,7 @@ describe('Watcher', function() {
 
       watcher.setHead('a_head_that_doesn\'t exist');
 
-      watcher.shouldTrigger(function(trigger) {
+      watcher.shouldTrigger(function(err, trigger) {
         trigger.should.be.true;
         done();
       });
@@ -77,7 +77,7 @@ describe('Watcher', function() {
 
       watcher.setHead('e9c920cd2bab859c72944ba9869948d1d74a2f74');
 
-      watcher.shouldTrigger(function(trigger) {
+      watcher.shouldTrigger(function(err, trigger) {
         trigger.should.be.false;
         done();
       });

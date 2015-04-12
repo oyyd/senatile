@@ -3,12 +3,10 @@
 var childProcess = require('child_process'),
   fs = require('fs'),
   async = require('async'),
-  data = require('./data'),
   Project = require('./project');
 
 var Watcher = module.exports = exports = function(projectOptions) {
   this.project = new Project(projectOptions);
-  this.latestHead = null;
   this.initialized = false;
   this._checkInterval = 10000;
 
@@ -23,7 +21,7 @@ var Watcher = module.exports = exports = function(projectOptions) {
 
     Watcher.prototype.setHead = function(head) {
       if (head) {
-        this.latestHead = head;
+        this.project.head = head;
       }
     };
 
@@ -39,7 +37,7 @@ var Watcher = module.exports = exports = function(projectOptions) {
 
     Watcher.prototype.initHead = function(callback) {
       var that = this;
-      if (!!!this.latestHead) {
+      if (!!!this.project.head) {
         this.getHead(function(head) {
           that.setHead(head);
           callback();
@@ -49,19 +47,20 @@ var Watcher = module.exports = exports = function(projectOptions) {
       }
     };
 
+    //TODO: cache project heads
     Watcher.prototype.shouldTrigger = function(callback) {
       var that = this;
-      data.getProjectHeads(this.project.name, function(err, heads) {
+      this.project.getHeads(function(err, heads) {
         if (err) {
-          //TODO: better err handling
-          throw err;
-        }
-
-        if (~heads.indexOf(that.latestHead)) {
-          callback(false);
+          callback(err);
           return;
         }
-        callback(true);
+
+        if (~heads.indexOf(that.project.head)) {
+          callback(null, false);
+          return;
+        }
+        callback(null, true);
       });
     };
 
@@ -71,24 +70,54 @@ var Watcher = module.exports = exports = function(projectOptions) {
       });
     };
 
+    Watcher.prototype.logProject = function(cb) {
+      this.project.logTasks(cb);
+    };
+
     //Loop to watch repo change
     Watcher.prototype.startWatch = function() {
       var that = this;
       var watchId = setInterval(function() {
-        if (!!!that.latestHead) {
-          //TODO: better handling when latestHead is null;
+        if (!!!that.project.head) {
+          //TODO: better handling when project.head is null;
           console.log('Getting the head..');
           return;
         }
 
-        that.shouldTrigger(function(trigger) {
+        async.waterfall([function(cb) {
+          //get head
+          that.getHead(function(head) {
+            that.setHead(head);
+          });
+        }, function(cb) {
+          //check status
+          that.shouldTrigger(function(err, trigger) {
+            cb(err, trigger);
+          });
+        }, function(trigger, cb) {
           if (trigger) {
+            console.log('Repo commited.');
             that.runProjectTasks(function(err) {
               if (err) {
-                //TODO:
-                console.log(err);
+                cb(err);
+              } else {
+                cb(null, true);
               }
             });
+          } else {
+            cb(null, false);
+          }
+        }, function(shouldLog) {
+          if (shouldLog) {
+            that.logProject(function(err) {
+              cb(err);
+            });
+            return;
+          }
+          cb(null);
+        }], function(err) {
+          if (err) {
+            throw err;
           }
         });
       }, this._checkInterval);

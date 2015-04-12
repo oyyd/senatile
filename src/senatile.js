@@ -13,7 +13,7 @@ senatile.init = function(config) {
     //load config
     //TODO: handle invalid config file
     try {
-      var config = JSON.parse(fs.readFileSync('../senatile_config.json'));
+      var config = JSON.parse(fs.readFileSync(__dirname + '/../senatile_config.json'));
     } catch (err) {
       throw err;
       return;
