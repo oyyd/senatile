@@ -1,7 +1,7 @@
 {
   "projects": {
     "test_repo": {
-      "path": "./test/test_repo",
+      "path": "/home/oyyd/code/github/senatile/test/test_repo",
       "tasks": {
         "jshint": {
           "command": "jshint ."

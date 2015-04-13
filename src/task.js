@@ -10,9 +10,11 @@ task.Task = function(name, command) {
   this.name = name;
   this.command = command;
   this.resultData = '';
-  this.runTask = function(callback) {
+  this.runTask = function(cwd, callback) {
     //TODO: make spawn parameters more spacifically.
-    var proc = childProcess.exec(command);
+    var proc = childProcess.exec(command, {
+      'cwd': cwd
+    });
 
     //record running result.
     var that = this;

@@ -8,7 +8,8 @@ var childProcess = require('child_process'),
 var Watcher = module.exports = exports = function(projectOptions) {
   this.project = new Project(projectOptions);
   this.initialized = false;
-  this._checkInterval = 10000;
+  this.areTasksRunning = false;
+  this._checkInterval = 5000;
 
   var that = this;
 
@@ -49,6 +50,7 @@ var Watcher = module.exports = exports = function(projectOptions) {
 
     //TODO: cache project heads
     Watcher.prototype.shouldTrigger = function(callback) {
+      console.log('check');
       var that = this;
       this.project.getHeads(function(err, heads) {
         if (err) {
@@ -65,36 +67,52 @@ var Watcher = module.exports = exports = function(projectOptions) {
     };
 
     Watcher.prototype.runProjectTasks = function(callback) {
+      if (this.areTasksRunning) {
+        return;
+      }
+
+      var that = this;
+      this.areTasksRunning = true;
+      console.log('run tasks');
       this.project.runTasks(function(err) {
+        that.areTasksRunning = false;
         callback(err);
       });
     };
 
     Watcher.prototype.logProject = function(cb) {
+      console.log('log project');
       this.project.logTasks(cb);
     };
 
     //Loop to watch repo change
     Watcher.prototype.startWatch = function() {
+      console.log('start watch');
+
       var that = this;
-      var watchId = setInterval(function() {
-        if (!!!that.project.head) {
-          //TODO: better handling when project.head is null;
-          console.log('Getting the head..');
+      var checkCommit = function() {
+        if (that.areTasksRunning || !!!that.project.head || that.project.head === 'HEAD') {
+          //TODO: better handling when project.head is null or 'HEAD';
           return;
         }
+        console.log('watch');
 
         async.waterfall([function(cb) {
           //get head
+          console.log('get head');
           that.getHead(function(head) {
             that.setHead(head);
+            cb();
           });
         }, function(cb) {
           //check status
+          console.log('check status');
           that.shouldTrigger(function(err, trigger) {
+            console.log(trigger);
             cb(err, trigger);
           });
         }, function(trigger, cb) {
+          console.log('should trigger ?');
           if (trigger) {
             console.log('Repo commited.');
             that.runProjectTasks(function(err) {
@@ -107,7 +125,7 @@ var Watcher = module.exports = exports = function(projectOptions) {
           } else {
             cb(null, false);
           }
-        }, function(shouldLog) {
+        }, function(shouldLog, cb) {
           if (shouldLog) {
             that.logProject(function(err) {
               cb(err);
@@ -120,7 +138,10 @@ var Watcher = module.exports = exports = function(projectOptions) {
             throw err;
           }
         });
-      }, this._checkInterval);
+      };
+
+      checkCommit();
+      var watchId = setInterval(checkCommit, this._checkInterval);
 
       return watchId;
     };

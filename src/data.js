@@ -25,6 +25,12 @@ data._getFile = function(path, callback) {
     if (err) {
       //TODO: handle err better
       callback(err);
+      return;
+    };
+
+    if (!!!data) {
+      callback(null, {});
+      return;
     };
 
     var project = null;

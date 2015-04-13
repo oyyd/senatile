@@ -22,7 +22,7 @@ describe('task', function() {
       //Task
       var aTask = new task.Task('test', 'ls');
 
-      aTask.runTask(function(code, signal) {
+      aTask.runTask('.', function(code, signal) {
         aTask.resultData.should.not.be.empty;
         done();
       });
