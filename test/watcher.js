@@ -37,6 +37,24 @@ describe('Watcher', function() {
     });
   });
 
+  describe('setHead', function() {
+    var watcher = new Watcher({
+      "name": 'test',
+      "path": __dirname + '/test_folder',
+      "tasks": []
+    });
+    it('should set head as \'test\'', function() {
+
+      watcher.setHead('test');
+      watcher.project.head.should.be.exactly('test');
+    });
+
+    it('should not set head if param is null', function() {
+      watcher.setHead(null);
+      watcher.project.head.should.be.exactly('test');
+    });
+  });
+
   describe('getHead', function() {
     it('should get the head of the testing project', function(done) {
       var watcher = new Watcher({
@@ -51,6 +69,19 @@ describe('Watcher', function() {
       });
     });
   });
+
+  //TODO: control `initHead` and write tests
+  // describe('initHead', function() {
+  //   it('should init head', function(done) {
+  //     var watcher = new Watcher({
+  //       "name": 'test',
+  //       "path": __dirname + '/test_folder',
+  //       "tasks": []
+  //     });
+  //   });
+  // });
+
+
 
   describe('shouldTrigger', function() {
     it('should trigger when head is different', function(done) {
@@ -83,4 +114,39 @@ describe('Watcher', function() {
       });
     });
   });
+
+  describe('runProjectTasks', function() {
+    //TODO: add test when `areTasksRunning` is true
+    it('should ', function(done) {
+      var watcher = new Watcher({
+        "name": 'test',
+        "path": __dirname + '/test_folder',
+        "tasks": {
+          "git_version": {
+            "command": "git --version"
+          }
+        }
+      });
+
+      watcher.runProjectTasks(function(err) {
+        watcher.project.tasks[0].resultData.indexOf('git version').should.not.be.exactly(-1);
+        done();
+      });
+    });
+  });
+
+  describe('logProject', function() {
+    //TODO:
+  });
+
+  describe('startWatch', function() {
+    //TODO:
+
+  });
+
+  describe('stopWatch', function() {
+    //TODO:
+
+  });
+
 });

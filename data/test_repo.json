@@ -1,8 +1,1 @@
-{
-  "96466078f02c174589e66d77b4a4a5048ff8b6fa": {
-    "timestamp": 1428939108914,
-    "tasksResult": {
-      "jshint": "js_file_for_test.js: line 1, col 10, Missing semicolon.\n\n1 error\n"
-    }
-  }
-}
+{"96466078f02c174589e66d77b4a4a5048ff8b6fa":{"timestamp":1428939108914,"tasksResult":{"jshint":"js_file_for_test.js: line 1, col 10, Missing semicolon.\n\n1 error\n"}},"2d1dbd48ebd5917df72983a858598e18575bc8ee":{"timestamp":1429013389282,"tasksResult":{"jshint":"js_file_for_test.js: line 1, col 10, Missing semicolon.\njs_file_for_test.js: line 2, col 14, Missing semicolon.\n\n2 errors\n"}}}
