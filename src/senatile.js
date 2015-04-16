@@ -1,8 +1,10 @@
 //main
 //dependencies
 var fs = require('fs'),
+  childProcess = require('child_process'),
   Watcher = require('./watcher'),
-  utils = require('./utils');
+  utils = require('./utils'),
+  server = require('./server');
 
 var senatile = module.exports = exports = {};
 
@@ -30,6 +32,7 @@ senatile.init = function(config) {
     watchers.push(watchers);
   };
 
+  senatile.startServer();
   return watchers;
 };
 
@@ -47,4 +50,9 @@ senatile.checkEnv = function() {
       throw new Error('git not found');
     }
   });
+};
+
+senatile.startServer = function() {
+  var app = server.start();
+  return app;
 };

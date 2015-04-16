@@ -1,1 +1,35 @@
-<h1>Hello, senatile!</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Build Status</title>
+    <link rel="stylesheet" href="lib/angular-material/angular-material.min.css"></link>
+  </head>
+  <body ng-app="testModule" ng-controller="testController">
+    <section>
+      <md-toolbar>
+        <div class="md-toolbar-tools md-whiteframe-z1">
+          <md-button class="md-icon-button" aria-label="Settings">
+          </md-button>
+          <h2>
+            <span>Senatile</span>
+          </h2>
+        </div>
+      </md-toolbar>
+      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open=" $mdMedia('gt-md')">
+        <md-content>
+          <md-button class="md-button md-default-theme" ng-transclude>abc</md-button>
+        </md-content>
+      </md-sidenav>
+      <md-content>
+        content
+      </md-content>
+    </section>
+
+    <script src="lib/angular/angular.min.js"></script>
+    <script src="lib/angular-animate/angular-animate.min.js"></script>
+    <script src="lib/angular-aria/angular-aria.min.js"></script>
+    <script src="lib/angular-material/angular-material.min.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
+

@@ -1,9 +1,15 @@
 var express = require('express');
 
-var app = express();
-var port = 9090;
+var server = module.exports = exports = {};
 
-app.use(express.static(__dirname + '/../www/'));
+server.start = function() {
+  var app = express();
+  var port = 9090;
 
-app.listen(port);
-console.log('server is running on ' + port);
+  app.use(express.static(__dirname + '/../www/'));
+
+  app.listen(port);
+  console.log('server is running on ' + port);
+
+  return app;
+};
