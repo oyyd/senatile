@@ -4,8 +4,10 @@ var fs = require('fs'),
 
 var data = module.exports = exports = {};
 
-data.getProject = function(projectName, callback) {
-  var path = filePath(projectName);
+data.getProject = function(projectName, callback, isPath) {
+  var path = isPath?prefixFile(projectName):filePath(projectName);
+
+  console.log(path);
 
   isExist(path, function(exists) {
     if (!exists) {
@@ -15,6 +17,27 @@ data.getProject = function(projectName, callback) {
         callback(err, projectObj);
       });
     }
+  });
+};
+
+data.getProjects = function(cb){
+  var projects = [];
+  fs.readdir(__dirname + '/../data', function(err, files){
+    if(err){
+      cb(err);
+      return;
+    }
+
+    async.each(files, function(file, callback){
+      data.getProject(file, function(err, projectObj){
+        if(projectObj){
+          projects.push(projectObj);
+        }
+        callback(err);        
+      }, true);
+    }, function(err){
+      cb(err, projects);
+    });
   });
 };
 
@@ -90,6 +113,10 @@ data.getProjectHeads = function(projectName, callback) {
 function filePath(projectName) {
   return __dirname + '/../data/' + projectName + '.json';
 }
+
+function prefixFile(file){
+  return __dirname + '/../data/' + file;
+};
 
 function isExist(path, callback) {
   fs.exists(path, function(exists) {

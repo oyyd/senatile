@@ -1,5 +1,3 @@
-var data = require('../data');
-
 var routes = module.exports = exports = function(app) {
-
+  app.get('/projects', require('./project/projects'));
 };
