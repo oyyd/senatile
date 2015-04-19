@@ -9,9 +9,13 @@ gulp.task('cleanCss', function(cb) {
 });
 
 gulp.task('less', ['cleanCss'], function() {
-  gulp.src(stylePath + 'style.less')
-    .pipe(less())
-    .pipe(gulp.dest(stylePath));
+  try {
+    gulp.src(stylePath + 'style.less')
+      .pipe(less())
+      .pipe(gulp.dest(stylePath));
+  } catch (e) {
+    console.log("catched");
+  }
 });
 
 gulp.task('watch', function() {

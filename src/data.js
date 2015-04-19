@@ -5,7 +5,14 @@ var fs = require('fs'),
 var data = module.exports = exports = {};
 
 data.getProject = function(projectName, callback, isPath) {
-  var path = isPath?prefixFile(projectName):filePath(projectName);
+  var path = null,
+    name = projectName;
+  if (isPath) {
+    path = prefixFile(projectName);
+    name = projectName.slice(0, projectName.indexOf('.json'));
+  } else {
+    path = filePath(projectName);
+  }
 
   console.log(path);
 
@@ -14,28 +21,29 @@ data.getProject = function(projectName, callback, isPath) {
       callback(null, {});
     } else {
       data._getFile(path, function(err, projectObj) {
+        projectObj.name = name;
         callback(err, projectObj);
       });
     }
   });
 };
 
-data.getProjects = function(cb){
+data.getProjects = function(cb) {
   var projects = [];
-  fs.readdir(__dirname + '/../data', function(err, files){
-    if(err){
+  fs.readdir(__dirname + '/../data', function(err, files) {
+    if (err) {
       cb(err);
       return;
     }
 
-    async.each(files, function(file, callback){
-      data.getProject(file, function(err, projectObj){
-        if(projectObj){
+    async.each(files, function(file, callback) {
+      data.getProject(file, function(err, projectObj) {
+        if (projectObj) {
           projects.push(projectObj);
         }
-        callback(err);        
+        callback(err);
       }, true);
-    }, function(err){
+    }, function(err) {
       cb(err, projects);
     });
   });
@@ -114,7 +122,7 @@ function filePath(projectName) {
   return __dirname + '/../data/' + projectName + '.json';
 }
 
-function prefixFile(file){
+function prefixFile(file) {
   return __dirname + '/../data/' + file;
 };
 

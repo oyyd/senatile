@@ -1,4 +1,22 @@
+.body {
+  display: none;
+}
+.senatile {
+  color: #445a64;
+}
 .senatile md-toolbar {
+  color: #fff;
   min-height: 42px;
   max-height: 42px;
+}
+.senatile project-card .content {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+.senatile project-card .content .head {
+  font-size: 24px;
+}
+.senatile project-card .panel {
+  padding: 5px;
+  height: 40px;
 }

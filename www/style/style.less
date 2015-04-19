@@ -1,7 +1,31 @@
+@color-primary: #CC00FF;
+@color-font: #445A64;
+
+.body{
+  display: none;
+}
+
 .senatile{
+  color: @color-font;
   md-toolbar{
+    color: #fff;
     @height: 42px;
     min-height: @height;
     max-height: @height;
+  }
+
+  // directives
+  project-card{
+    .content{
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      .head{
+        font-size: 24px;
+      }          
+    }
+    .panel{
+      padding: 5px;
+      height: 40px;
+    }
   }
 }

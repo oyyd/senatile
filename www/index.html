@@ -7,22 +7,23 @@
   </head>
   <body ng-app="testModule" ng-controller="testController">
     <section class="senatile">
-      <md-toolbar>
-        <div class="md-toolbar-tools md-whiteframe-z1">
-          <md-button class="md-icon-button" aria-label="Settings">
+      <!-- toolbar -->
+      <md-toolbar class="md-raised md-whiteframe-z1">
+        <div class="md-toolbar-tools">
+          <md-button class="md-icon-button md-primary" aria-label="Settings">
+            <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>            
           </md-button>
           <h2>
             <span>Senatile</span>
           </h2>
         </div>
-      </md-toolbar>
-      <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open=" $mdMedia('gt-md')">
-        <md-content>
-          <md-button class="md-button md-default-theme" ng-transclude>abc</md-button>
-        </md-content>
-      </md-sidenav>
+      </md-toolbar>      
+      <!-- projects -->      
+      <div layout="row" layout-margin>          
+        <project-card ng-repeat="project in projects track by $index" flex data-name="{{project.name}}" data-status="" data-last-build-time="{{project.lastBuildTime}}" data-head="{{project.latestHead}}"></project-card>
+      </div>
+
       <md-content>
-        content
       </md-content>
     </section>
 
