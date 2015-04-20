@@ -55,6 +55,10 @@
         card.classList.remove('md-whiteframe-z2');
         card.classList.add('md-whiteframe-z1');
       });
+
+      ele.querySelector('[role="detailLink"]').onclick = function() {
+        location.href = a['detailUrl'];
+      };
     };
 
     return {

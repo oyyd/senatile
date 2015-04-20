@@ -20,7 +20,7 @@
       </md-toolbar>      
       <!-- projects -->      
       <div layout="row" layout-margin>          
-        <project-card ng-repeat="project in projects track by $index" flex data-name="{{project.name}}" data-status="" data-last-build-time="{{project.lastBuildTime}}" data-head="{{project.latestHead}}"></project-card>
+        <project-card ng-repeat="project in projects track by $index" flex data-name="{{project.name}}" data-status="" data-last-build-time="{{project.lastBuildTime}}" data-head="{{project.latestHead}}" data-detail-url="/project/{{project.name}}"></project-card>
       </div>
 
       <md-content>
